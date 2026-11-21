@@ -32,7 +32,7 @@ if errors.Is(err, breaker.ErrOpen) {
 
 State machine: `Closed --threshold--> Open --cooldown--> HalfOpen --successes--> Closed` (a trip-worthy failure in half-open re-opens immediately). `ErrOpen` is classified Transient on purpose: outer retry loops back off rather than treat the refusal as terminal.
 
-Lower-level API when the call and the verdict are separated: `Allow() error` + `Record(err)`. Concurrency-safe; clock injectable via `Config.Now` for deterministic tests.
+Lower-level API when the call and the verdict are separated: `Allow() error` + `Record(err)`. Concurrency-safe; clock injectable via `Config.Now` for deterministic tests. `Config.OnTransition func(from, to State)` fires on every state change, serialized in transition order (under the lock) — for metrics and logging; observers must not call back into the same Breaker.
 
 ## Zero dependencies
 
@@ -40,4 +40,6 @@ One dependency by design: go-error-family (the classification contract the trip 
 
 ## Consumers
 
-Planned migration rows (filed 2026-11-21 per ADR-0001, wire-or-delete for each bespoke breaker): Cyberdom, Kernovia, RedditParse, Rolls-Royce-mtuGoHelpCenter-golang, StopTube, dnsblockd, file-and-image-renamer, superb-gh-milestone-extention (and the config-declared breakers in ActaFlow, ai-router-implementation, ai-task-prioritizer, BuildFlow, ast-state-analyzer where the verdict is a row, not a migration).
+Adopted: **file-and-image-renamer** (v0.2.0, 2026-11-21 — provider-call gate; `OnTransition` feeds the resilience metrics; grew from this consumer's need).
+
+Planned migration rows (filed 2026-11-21 per ADR-0001, wire-or-delete for each bespoke breaker): Cyberdom, Kernovia, RedditParse, Rolls-Royce-mtuGoHelpCenter-golang, StopTube, dnsblockd, superb-gh-milestone-extention (and the config-declared breakers in ActaFlow, ai-router-implementation, ai-task-prioritizer, BuildFlow, ast-state-analyzer where the verdict is a row, not a migration).

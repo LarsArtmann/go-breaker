@@ -79,6 +79,13 @@ type Config struct {
 	// Now is the clock; inject for deterministic tests. Default:
 	// time.Now.
 	Now func() time.Time
+
+	// OnTransition, when set, is invoked after every state change with
+	// the from/to states. Observers run while the breaker's lock is held,
+	// so they are serialized in transition order — but they must be cheap,
+	// non-blocking, and must never call back into the same Breaker (that
+	// would deadlock). Use for metrics and logging, not for control flow.
+	OnTransition func(from, to State)
 }
 
 // DefaultConfig returns the default configuration.
@@ -114,6 +121,7 @@ type Breaker struct {
 	consecFailures  int
 	consecSuccesses int
 	openedAt        time.Time
+	onTransition    func(from, to State)
 }
 
 // New creates a breaker, filling zero Config fields with defaults.
@@ -146,6 +154,7 @@ func New(cfg Config) *Breaker {
 		successThreshold: cfg.SuccessThreshold,
 		tripOn:           cfg.TripOn,
 		now:              cfg.Now,
+		onTransition:     cfg.OnTransition,
 		state:            StateClosed,
 	}
 }
@@ -166,7 +175,7 @@ func (b *Breaker) Allow() error {
 	defer b.mu.Unlock()
 
 	if b.state == StateOpen && b.now().Sub(b.openedAt) >= b.resetTimeout {
-		b.state = StateHalfOpen
+		b.transition(StateHalfOpen)
 		b.consecSuccesses = 0
 	}
 
@@ -226,7 +235,7 @@ func (b *Breaker) recordSuccess() {
 	if b.state == StateHalfOpen {
 		b.consecSuccesses++
 		if b.consecSuccesses >= b.successThreshold {
-			b.state = StateClosed
+			b.transition(StateClosed)
 			b.consecSuccesses = 0
 		}
 
@@ -241,8 +250,24 @@ func (b *Breaker) recordFailure() {
 	b.consecFailures++
 
 	if b.state == StateHalfOpen || b.consecFailures >= b.failureThreshold {
-		b.state = StateOpen
+		b.transition(StateOpen)
 		b.openedAt = b.now()
 		b.consecFailures = 0
+	}
+}
+
+// transition moves the circuit to newState and fires the OnTransition
+// observer. Callers must hold b.mu; the observer runs under the lock so
+// events arrive in transition order.
+func (b *Breaker) transition(newState State) {
+	oldState := b.state
+	if oldState == newState {
+		return
+	}
+
+	b.state = newState
+
+	if b.onTransition != nil {
+		b.onTransition(oldState, newState)
 	}
 }

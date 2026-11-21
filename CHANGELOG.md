@@ -9,6 +9,12 @@ versioning follows [Semantic Versioning](https://semver.org/).
 
 Nothing yet.
 
+## [0.2.0] - 2026-11-21
+
+### Added
+
+- `Config.OnTransition func(from, to State)`: observer fired on every state change (closed→open, open→half_open, half_open→closed, half_open→open), serialized in transition order under the breaker's lock. Observers must be cheap and must never call back into the same Breaker. Grew from the first consumer migration (file-and-image-renamer's resilience metrics feed). Tests: lifecycle order goldens, half-open reopen sequence.
+
 ## [0.1.0] - 2026-11-21
 
 ### Added
