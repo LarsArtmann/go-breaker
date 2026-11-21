@@ -40,6 +40,6 @@ One dependency by design: go-error-family (the classification contract the trip 
 
 ## Consumers
 
-Adopted: **file-and-image-renamer** (v0.2.0, 2026-11-21 — provider-call gate; `OnTransition` feeds the resilience metrics; grew from this consumer's need).
+Adopted (wire-or-delete migrations, 2026-11-21): **file-and-image-renamer** (v0.2.0 — provider-call gate; `OnTransition` feeds the resilience metrics; grew from this consumer's need), **dnsblockd** (restart-storm gate, `TripOn` always), **StopTube** (native-messaging send gate), **superb-gh-milestone-extention** (GitHub API gate, metrics + logger via `OnTransition`), **Cyberdom** (AI client gate, was sony/gobreaker), **RedditParse** (per-operation database gate, was sony/gobreaker), **Kernovia** (WASM plugin gate).
 
-Planned migration rows (filed 2026-11-21 per ADR-0001, wire-or-delete for each bespoke breaker): Cyberdom, Kernovia, RedditParse, Rolls-Royce-mtuGoHelpCenter-golang, StopTube, dnsblockd, superb-gh-milestone-extention (and the config-declared breakers in ActaFlow, ai-router-implementation, ai-task-prioritizer, BuildFlow, ast-state-analyzer where the verdict is a row, not a migration).
+Deleted as orphans instead of wired: Rolls-Royce-mtuGoHelpCenter-golang (two bespoke breakers with zero production wiring).
