@@ -255,16 +255,14 @@ func TestConcurrentUseStaysConsistent(t *testing.T) {
 	var wg sync.WaitGroup
 
 	for range 50 {
-		wg.Add(1)
 
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 
 			_ = b.Execute(func() error { return transientErr() })
 			b.Record(nil)
 			_ = b.State()
 			_ = b.Allow()
-		}()
+		})
 	}
 
 	wg.Wait()
