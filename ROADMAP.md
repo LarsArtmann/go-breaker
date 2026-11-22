@@ -19,7 +19,12 @@ questions answered, one raw idea shipped into FEATURES.md).
   dependency-free, adapters ship as separate modules
 - CI: GitHub Actions running buildflow — today the quality gate is
   local-only (go-retry runs CI; this repo has none)
-- Verify pkg.go.dev rendering for v0.2.0 (go-release skill owns the ritual)
+- ~~Verify pkg.go.dev rendering for v0.2.0 (go-release skill owns the
+  ritual)~~ done 2026-11-22: proxy lists both tags; pkg.go.dev indexes v0.2.0
+  (published Nov 21); License UNKNOWN is accurate for the Proprietary
+  LICENSE, which also means pkg.go.dev shows no rendered docs by policy —
+  `go doc` verifies locally instead (package doc, state machine, and all
+  Config fields render clean); "Imported by: 0" reflects private consumers
 - CONTRIBUTING.md: pointer to AGENTS.md for AI-assisted contributions
 - Lychee/link check of README consumer links
 - Dependabot: decide a major-version grouping policy
