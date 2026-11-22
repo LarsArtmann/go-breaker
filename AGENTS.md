@@ -9,7 +9,9 @@ vocabulary lives in `docs/DOMAIN_LANGUAGE.md`.
 
 A single-file, zero-goroutine, error-family-aware circuit breaker library —
 the sibling of go-retry ("should I even try?" vs "should I try again?").
-Entire implementation is `breaker.go`; entire test suite is `breaker_test.go`.
+Entire implementation is `breaker.go`; tests live in `breaker_test.go`
+(core), `breaker_transition_test.go` (OnTransition), and `gomod_test.go`
+(go-directive guard).
 No CLI, no service, no packages, no flake.nix (nix-hermetic by triviality —
 STACK.md). One dependency by design: `go-error-family` (the trip semantics
 ride on its classification contract; do not add more).
@@ -42,13 +44,30 @@ ride on its classification contract; do not add more).
 - The `internal/`-directory suggestion from go-structure-linter is a
   deliberate non-fix: this is a public single-package library by design
   (STACK.md).
+- `govulncheck` can report stdlib advisories (e.g. GO-2026-6859 in
+  net/http) traced through init chains — these flag the **host Go
+  toolchain** (1.27.3 at the time), not this repo's code. No sibling pins a
+  `toolchain` directive; the finding clears when the system toolchain
+  updates. CI scans with a fresh 1.27.x and stays clean.
+- markdownlint runs nowhere here by design: every Go-library sibling
+  (go-retry, go-error-family, go-output, go-aichat) ships no
+  `.markdownlint*` config — dprint's markdown plugin owns markdown
+  formatting fleet-wide, so `buildflow -s markdown-lint` stays "not
+  applicable". Only BuildFlow itself curates a markdownlint config.
 - `docs-gates` hard-requires `TODO_LIST.md` to exist — delete or rename it
   and the docs-gates step FATALs ("reading TODO_LIST.md: no such file").
   Its freshness gate also requires every open item in a `docs/status/`
   report to be represented in a living doc (TODO_LIST/ROADMAP/CHANGELOG).
 - `SECURITY.md` is securitymd-generated and drifted once (wrong repo URL,
   nonexistent version, false CI claim) — re-verify its repo-specific fields
-  after any shared-hygiene regeneration.
+  after any shared-hygiene regeneration. Regen-safe contract (verified
+  2026-11-22 from the securitymd README): plain `securitymd setup` **never
+  overwrites** an existing policy; `setup --force` regenerates in place but
+  backs up to `SECURITY.md.<timestamp>.bak` first and re-derives org/repo
+  from the git remote, the supported version from the latest tag, and the
+  advisory URL when no contact email is set — after any `--force`, diff
+  against the `.bak` and re-apply the repo-specific practice lines it cannot
+  know (CI description, review practice).
 
 ## Design contracts (breaking any of these is a breaking change)
 
@@ -84,8 +103,10 @@ ride on its classification contract; do not add more).
 - Deterministic time in tests: capture `now` in a variable, inject
   `Config.Now: func() time.Time { return now }`, then advance `now` — no
   sleeps anywhere in the suite.
-- Doc comments are the public API docs (pkg.go.dev) — package comment in
-  `breaker.go` carries the state-machine diagram; keep it in sync.
+- Doc comments are the public API docs (pkg.go.dev shows no rendered docs
+  for Proprietary-licensed modules — `go doc` is the local verification
+  path); package comment in `breaker.go` carries the state-machine edge
+  list; keep it in sync.
 - Error codes are dotted lowercase namespaced (`breaker.open`).
 - Tabs in Go, 2-space in yml/json/toml/nix (`.editorconfig`).
 
@@ -112,7 +133,10 @@ ride on its classification contract; do not add more).
 ## Repo facts
 
 - Default branch is `master` (git-town config; `main` is remapped).
-- No CI workflows — `.github/` contains only `dependabot.yml`.
+- CI: `.github/workflows/ci.yml` (go-retry's shape, SHA-pinned actions) —
+  race tests + govulncheck, a 95% coverage floor, dprint + golangci-lint.
+  BuildFlow stays the local orchestrator; CI replicates its verdict.
+  Actionlint is the local workflow check (`actionlint` on PATH).
 - `reports/` is gitignored (coverage artifacts; `reports/coverage.out` may
   exist locally, untracked).
 - `dprint.json` fetches its plugins over the network on first use — a cold

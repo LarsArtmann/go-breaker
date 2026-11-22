@@ -10,7 +10,9 @@ gaps), `BROKEN` (present but failing), `PLANNED` (no code yet), and
 _Test status: `go test ./... -race` is green; statement coverage is 98.4%
 (`go test -cover ./...` — the `coverage: 98.4% of statements` line; the
 uncovered remainder is the no-op branch of `transition` when the target state
-equals the current one, `breaker.go:264`)._
+equals the current one, `breaker.go:266`). CI enforces a 95% coverage floor
+on every push (`.github/workflows/ci.yml`), so this number cannot rot
+silently._
 
 **Created:** 2026-11-22 · Crush (glm-5.3), docs-health AUDIT · backlog basis:
 full code walk of `breaker.go` + `breaker_test.go`, coverage run above.

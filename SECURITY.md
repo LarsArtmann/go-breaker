@@ -33,13 +33,12 @@ Please do **not** open public issues for security problems. Report privately ins
 ## Security Practices
 
 - All changes are code-reviewed before merge
-- Quality gate (lint, format, tests with `-race`) runs via BuildFlow before
-  commits land; repository has no CI pipeline yet (tracked in
-  [ROADMAP.md](ROADMAP.md))
+- Quality gate (lint, format, tests with `-race`, govulncheck) runs via
+  BuildFlow locally and via GitHub Actions CI
+  ([ci.yml](.github/workflows/ci.yml)) on every push and pull request
 - Dependencies are kept up to date (weekly Dependabot gomod updates)
 
 ---
 
 _Maintained with [securitymd](https://github.com/LarsArtmann/securitymd). Last
-updated: 2026-11-22 — corrected for go-breaker (advisory URL, supported
-version, CI claim)._
+updated: 2026-11-22 — CI practice line updated for the new Actions pipeline._

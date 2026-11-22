@@ -1,6 +1,7 @@
 # go-breaker
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-orange.svg)](LICENSE)
+[![CI](https://github.com/LarsArtmann/go-breaker/actions/workflows/ci.yml/badge.svg)](https://github.com/LarsArtmann/go-breaker/actions/workflows/ci.yml)
 
 A dependency-light, error-family-aware circuit breaker for Go — the sibling of [go-retry](https://github.com/Larsartmann/go-retry) for the failure side of resilience. Retry answers "should I try again?"; the breaker answers "should I even try?". Extracted 2026-11-21 from the domain-language census, which counted 12+ bespoke circuit-breaker implementations across the fleet.
 
