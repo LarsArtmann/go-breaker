@@ -141,3 +141,7 @@ ride on its classification contract; do not add more).
   exist locally, untracked).
 - `dprint.json` fetches its plugins over the network on first use — a cold
   run can hang; cached under `~/.cache/dprint` afterwards.
+- BuildFlow's dprint step skips dot-directories, but CI's `dprint check`
+  scans them: `.config/metadata.yaml` must be formatted with plain
+  `dprint fmt .config/metadata.yaml` (2-space yaml lists) or the CI lint
+  job fails while the local gate stays green (hit 2026-11-22).
