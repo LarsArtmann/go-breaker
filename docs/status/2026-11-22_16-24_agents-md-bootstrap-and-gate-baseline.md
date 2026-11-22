@@ -136,36 +136,36 @@ Self-review answers (brutal-self-review questions folded in per request):
 padding to 50 with filler would be dishonest — the skill itself calls large-N
 brainstorm fuel):
 
-| #  | Task                                                                                                                        | P  | Route    |
-| -- | --------------------------------------------------------------------------------------------------------------------------- | -- | -------- |
-| 1  | T1: split `breaker_test.go` (354>350) — OnTransition tests to second file                                                   | P2 | TODO     |
-| 2  | T2: adopt `.golangci.yml` via `buildflow -s golangci-lint-auto-configure --fix`, review diff                                | P2 | TODO     |
-| 3  | T3: README Installation section (`go get` step)                                                                             | P3 | TODO     |
-| 4  | CHANGELOG `## [Unreleased]`: record AGENTS.md + TODO_LIST.md bootstrap                                                      | P2 | TODO     |
-| 5  | Run `buildflow -s markdown-lint` and `-s codespell` over the new docs                                                       | P2 | TODO     |
-| 6  | Reconcile findings-gate 4-vs-3 count attribution; re-measure true exit code                                                 | P3 | TODO     |
-| 7  | README "Zero dependencies" heading vs "One dependency" body — fix or keep (owner wording, Q2)                               | P3 | TODO     |
-| 8  | Regenerate or trash stale `reports/coverage.out`                                                                            | P3 | TODO     |
-| 9  | Guard test pinning go.mod `go 1.27` directive (go-retry's pattern)                                                          | P2 | TODO     |
-| 10 | When T1/T2 land: shrink AGENTS.md baseline section to a TODO_LIST pointer (kill split brain)                                | P2 | TODO     |
-| 11 | Document internal/-dir info finding as deliberate non-fix in AGENTS.md                                                      | P3 | TODO     |
-| 12 | Read SECURITY.md/AUTHORS/LICENSE; fold supported-versions fact into AGENTS.md if non-obvious                                | P3 | TODO     |
-| 13 | FEATURES.md BUILD (Execute / Allow+Record / State / OnTransition / family trip — all FULLY_FUNCTIONAL)                      | P3 | ROADMAP  |
-| 14 | ROADMAP.md seed: sliding-window trip counting, per-breaker label for metrics, ExecuteCtx, metrics adapter over OnTransition | P3 | ROADMAP  |
-| 15 | CI decision (Q3): GitHub Actions running buildflow vs local-gate-only                                                       | P2 | ROADMAP  |
-| 16 | Verify pkg.go.dev rendering for v0.2.0 (go-release skill owns the ritual)                                                   | P3 | ROADMAP  |
-| 17 | CONTRIBUTING.md: pointer to AGENTS.md for AI-assisted contributions                                                         | P3 | ROADMAP  |
-| 18 | Lychee/link check of README consumer links (8 md files in gate scope)                                                       | P3 | ROADMAP  |
-| 19 | Coverage % recorded once FEATURES.md exists                                                                                 | P3 | ROADMAP  |
-| 20 | dependabot: decide major-version grouping policy                                                                            | P3 | ROADMAP  |
-| 21 | Commit policy resolution for the two untracked files (Q1 below)                                                             | P1 | OWNER    |
-| 22 | Fleet-policy call on FEATURES/ROADMAP creation timing (Q3 below)                                                            | P3 | OWNER    |
+| #  | Task                                                                                                                            | P  | Route             |
+| -- | ------------------------------------------------------------------------------------------------------------------------------- | -- | ----------------- |
+| 1  | ~~T1: split `breaker_test.go` (354>350) — OnTransition tests to second file~~                                                   | P2 | done at `abc6a7a` |
+| 2  | ~~T2: adopt `.golangci.yml` via `buildflow -s golangci-lint-auto-configure --fix`, review diff~~                                | P2 | done at `0f2f23c` |
+| 3  | ~~T3: README Installation section (`go get` step)~~                                                                             | P3 | done at `dad3511` |
+| 4  | ~~CHANGELOG `## [Unreleased]`: record AGENTS.md + TODO_LIST.md bootstrap~~                                                      | P2 | done at `18e3c05` |
+| 5  | ~~Run `buildflow -s markdown-lint` and `-s codespell` over the new docs~~                                                       | P2 | done at `18e3c05` |
+| 6  | ~~Reconcile findings-gate 4-vs-3 count attribution; re-measure true exit code~~                                                 | P3 | done at `18e3c05` |
+| 7  | ~~README "Zero dependencies" heading vs "One dependency" body — fix or keep (owner wording, Q2)~~                               | P3 | done at `dad3511` |
+| 8  | ~~Regenerate or trash stale `reports/coverage.out`~~                                                                            | P3 | done at `52a1679` |
+| 9  | ~~Guard test pinning go.mod `go 1.27` directive (go-retry's pattern)~~                                                          | P2 | done at `160061a` |
+| 10 | ~~When T1/T2 land: shrink AGENTS.md baseline section to a TODO_LIST pointer (kill split brain)~~                                | P2 | done at `18e3c05` |
+| 11 | ~~Document internal/-dir info finding as deliberate non-fix in AGENTS.md~~                                                      | P3 | done at `18e3c05` |
+| 12 | ~~Read SECURITY.md/AUTHORS/LICENSE; fold supported-versions fact into AGENTS.md if non-obvious~~                                | P3 | done at `18e3c05` |
+| 13 | ~~FEATURES.md BUILD (Execute / Allow+Record / State / OnTransition / family trip — all FULLY_FUNCTIONAL)~~                      | P3 | done at `18e3c05` |
+| 14 | ~~ROADMAP.md seed: sliding-window trip counting, per-breaker label for metrics, ExecuteCtx, metrics adapter over OnTransition~~ | P3 | done at `18e3c05` |
+| 15 | ~~CI decision (Q3): GitHub Actions running buildflow vs local-gate-only~~                                                       | P2 | done at `4786db3` |
+| 16 | ~~Verify pkg.go.dev rendering for v0.2.0 (go-release skill owns the ritual)~~                                                   | P3 | done at `892e166` |
+| 17 | ~~CONTRIBUTING.md: pointer to AGENTS.md for AI-assisted contributions~~                                                         | P3 | done at `efa78f9` |
+| 18 | ~~Lychee/link check of README consumer links (8 md files in gate scope)~~                                                       | P3 | done at `3448f3c` |
+| 19 | ~~Coverage % recorded once FEATURES.md exists~~                                                                                 | P3 | done at `efa78f9` |
+| 20 | ~~dependabot: decide major-version grouping policy~~                                                                            | P3 | done at `efa78f9` |
+| 21 | ~~Commit policy resolution for the two untracked files (Q1 below)~~                                                             | P1 | done at `52a1679` |
+| 22 | ~~Fleet-policy call on FEATURES/ROADMAP creation timing (Q3 below)~~                                                            | P3 | done at `18e3c05` |
 
-Items 1-3 are TODO_LIST T1-T3 (already routed); every other TODO-routed row
-above is harvested into TODO_LIST as T4+; the ROADMAP/OWNER items live in
-ROADMAP.md (created as immediate follow-through — the freshness gate requires
-every report open item to be represented in a living doc; owner questions
-pending your answers).
+All 22 rows resolved and struck 2026-11-22 (gate-to-green pareto execution;
+verdict trails in `CHANGELOG.md` and living docs — follow those, not this
+snapshot). Resolved-question notes: rows 8 and 21 closed by evidence in the
+plan errata (`52a1679`); row 6 closed as no-longer-reproducible; row 15 by
+owner approval the same day.
 
 ## g) Questions I cannot figure out myself
 

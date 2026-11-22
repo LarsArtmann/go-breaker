@@ -134,29 +134,30 @@ lost. The sloppiness ledger (all caught and corrected in-flight):
 17 real items (routes: TODO = bounded; ROADMAP = raw/owner; the ceiling is
 not a target — padding would be dishonest filler):
 
-| #  | Task                                                                                                   | P  | Route   |
-| -- | ------------------------------------------------------------------------------------------------------ | -- | ------- |
-| 1  | T1: split `breaker_test.go` (354 > 350 cap) — OnTransition tests to a second file                      | P2 | TODO    |
-| 2  | T2: adopt `.golangci.yml` via `buildflow -s golangci-lint-auto-configure --fix`, review diff           | P2 | TODO    |
-| 3  | T8: regenerate `reports/coverage.out` (the audit's profile was one `cp` away) or trash it              | P3 | TODO    |
-| 4  | T9: guard test pinning go.mod `go 1.27` (go-retry's `TestModuleGoDirectiveStaysPinned` pattern)        | P2 | TODO    |
-| 5  | T13 (new): markdownlint config decision — check sibling repos, add config or record deliberate non-fix | P3 | TODO    |
-| 6  | T14 (new): standing guard (or accepted hand-maintenance verdict) for FEATURES' coverage claim          | P3 | TODO    |
-| 7  | License contradiction resolution — MIT badge vs PROPRIETARY LICENSE (owner, Q1 below)                  | P1 | OWNER   |
-| 8  | Commit ownership — 4 modified + 5 untracked files waiting (owner, Q2 below)                            | P1 | OWNER   |
-| 9  | Annotate the 16-24 report's 8 completed §f rows (next docs session)                                    | P3 | TODO    |
-| 10 | Trim CHANGELOG `[Unreleased]` prose that re-tells the 8 purge lines (polish, optional)                 | P3 | TODO    |
-| 11 | securitymd regeneration path: verify correct args exist so future regens keep the fixes                | P3 | TODO    |
-| 12 | Verify pma daemon actually picks up these files (Q2-adjacent observation task)                         | P3 | TODO    |
-| 13 | CI decision: GitHub Actions running buildflow vs local-gate-only                                       | P2 | ROADMAP |
-| 14 | Verify pkg.go.dev rendering for v0.2.0 (go-release skill)                                              | P3 | ROADMAP |
-| 15 | CONTRIBUTING.md pointer to AGENTS.md for AI-assisted contributions                                     | P3 | ROADMAP |
-| 16 | Lychee/link check of README consumer links                                                             | P3 | ROADMAP |
-| 17 | Dependabot major-version grouping policy                                                               | P3 | ROADMAP |
+| #  | Task                                                                                                       | P  | Route             |
+| -- | ---------------------------------------------------------------------------------------------------------- | -- | ----------------- |
+| 1  | ~~T1: split `breaker_test.go` (354 > 350 cap) — OnTransition tests to a second file~~                      | P2 | done at `abc6a7a` |
+| 2  | ~~T2: adopt `.golangci.yml` via `buildflow -s golangci-lint-auto-configure --fix`, review diff~~           | P2 | done at `0f2f23c` |
+| 3  | ~~T8: regenerate `reports/coverage.out` (the audit's profile was one `cp` away) or trash it~~              | P3 | done at `52a1679` |
+| 4  | ~~T9: guard test pinning go.mod `go 1.27` (go-retry's `TestModuleGoDirectiveStaysPinned` pattern)~~        | P2 | done at `160061a` |
+| 5  | ~~T13 (new): markdownlint config decision — check sibling repos, add config or record deliberate non-fix~~ | P3 | done at `efa78f9` |
+| 6  | ~~T14 (new): standing guard (or accepted hand-maintenance verdict) for FEATURES' coverage claim~~          | P3 | done at `efa78f9` |
+| 7  | ~~License contradiction resolution — MIT badge vs PROPRIETARY LICENSE (owner, Q1 below)~~                  | P1 | done at `dad3511` |
+| 8  | ~~Commit ownership — 4 modified + 5 untracked files waiting (owner, Q2 below)~~                            | P1 | done at `52a1679` |
+| 9  | ~~Annotate the 16-24 report's 8 completed §f rows (next docs session)~~                                    | P3 | done at `3448f3c` |
+| 10 | ~~Trim CHANGELOG `[Unreleased]` prose that re-tells the 8 purge lines (polish, optional)~~                 | P3 | done at `efa78f9` |
+| 11 | ~~securitymd regeneration path: verify correct args exist so future regens keep the fixes~~                | P3 | done at `efa78f9` |
+| 12 | ~~Verify pma daemon actually picks up these files (Q2-adjacent observation task)~~                         | P3 | done at `52a1679` |
+| 13 | ~~CI decision: GitHub Actions running buildflow vs local-gate-only~~                                       | P2 | done at `4786db3` |
+| 14 | ~~Verify pkg.go.dev rendering for v0.2.0 (go-release skill)~~                                              | P3 | done at `892e166` |
+| 15 | ~~CONTRIBUTING.md pointer to AGENTS.md for AI-assisted contributions~~                                     | P3 | done at `efa78f9` |
+| 16 | ~~Lychee/link check of README consumer links~~                                                             | P3 | done at `3448f3c` |
+| 17 | ~~Dependabot major-version grouping policy~~                                                               | P3 | done at `efa78f9` |
 
-Items 1-4 are existing TODO rows; 5-6 are new rows harvested now; 9-12 are
-new bounded rows harvested now; 7-8 live in ROADMAP Open questions; 13-17
-are ROADMAP raw ideas.
+All 17 rows resolved and struck 2026-11-22 by the gate-to-green pareto
+execution (owner approved both gated decisions — CI: yes; annotate: yes);
+verdict trails live in `CHANGELOG.md` and the living docs — follow those,
+not this snapshot.
 
 ## g) Questions I cannot figure out myself
 
