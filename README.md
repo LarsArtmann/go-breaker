@@ -1,6 +1,6 @@
 # go-breaker
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-orange.svg)](LICENSE)
 
 A dependency-light, error-family-aware circuit breaker for Go — the sibling of [go-retry](https://github.com/Larsartmann/go-retry) for the failure side of resilience. Retry answers "should I try again?"; the breaker answers "should I even try?". Extracted 2026-11-21 from the domain-language census, which counted 12+ bespoke circuit-breaker implementations across the fleet.
 
@@ -11,6 +11,12 @@ import "github.com/larsartmann/go-breaker"
 ## Why error-family aware
 
 Only **Transient** and **Infrastructure** failures count toward opening the circuit — a Rejection (bad input), Conflict (state mismatch), or Corruption (integrity) failure is deterministic, and breaking the circuit would not make the next identical call succeed. The default predicate is one line of [go-error-family](https://github.com/larsartmann/go-error-family) classification, overridable per breaker.
+
+## Installation
+
+Requires Go 1.27 or newer (the code uses `for range N` and `wg.Go`).
+
+    go get github.com/larsartmann/go-breaker@latest
 
 ## Usage
 
@@ -34,9 +40,11 @@ State machine: `Closed --threshold--> Open --cooldown--> HalfOpen --successes-->
 
 Lower-level API when the call and the verdict are separated: `Allow() error` + `Record(err)`. Concurrency-safe; clock injectable via `Config.Now` for deterministic tests. `Config.OnTransition func(from, to State)` fires on every state change, serialized in transition order (under the lock) — for metrics and logging; observers must not call back into the same Breaker.
 
-## Zero dependencies
+## One dependency, by design
 
-One dependency by design: go-error-family (the classification contract the trip semantics ride on). No timers, no goroutines, no background state — the circuit evaluates lazily on each call.
+go-error-family is the only dependency — the classification contract the
+trip semantics ride on. No timers, no goroutines, no background state — the
+circuit evaluates lazily on each call.
 
 ## Consumers
 
