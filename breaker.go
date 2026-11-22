@@ -14,10 +14,10 @@
 //
 // The states form a strict machine:
 //
-//	Closed --threshold consecutive trip-worthy failures--> Open
-//	Open   --ResetTimeout elapsed, next Allow------------> HalfOpen
-//	HalfOpen --SuccessThreshold successes----------------> Closed
-//	HalfOpen --one trip-worthy failure--------------------> Open
+//	Closed   -> Open     after FailureThreshold consecutive trip-worthy failures
+//	Open     -> HalfOpen after ResetTimeout elapses, on the next Allow
+//	HalfOpen -> Closed   after SuccessThreshold consecutive successes
+//	HalfOpen -> Open     after one trip-worthy failure
 package breaker
 
 import (
@@ -197,6 +197,7 @@ func (b *Breaker) Record(err error) {
 
 	if err == nil {
 		b.recordSuccess()
+
 		return
 	}
 

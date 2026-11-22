@@ -9,6 +9,8 @@ import (
 	errorfamily "github.com/larsartmann/go-error-family"
 )
 
+var errBoom = errors.New("boom")
+
 func transientErr() error {
 	return errorfamily.NewTransient("test.transient", "transient failure")
 }
@@ -26,15 +28,17 @@ func conflictErr() error {
 }
 
 func TestExecutePassesThroughWhenClosed(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{})
 
 	called := false
 
 	err := b.Execute(func() error {
 		called = true
+
 		return nil
 	})
-
 	if err != nil {
 		t.Fatalf("closed breaker must pass nil errors through, got %v", err)
 	}
@@ -49,6 +53,8 @@ func TestExecutePassesThroughWhenClosed(t *testing.T) {
 }
 
 func TestThresholdConsecutiveFailuresOpen(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{FailureThreshold: 3})
 
 	for range 2 {
@@ -69,6 +75,8 @@ func TestThresholdConsecutiveFailuresOpen(t *testing.T) {
 }
 
 func TestOpenRefusesCheaply(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{FailureThreshold: 1})
 
 	_ = b.Execute(transientErr)
@@ -77,6 +85,7 @@ func TestOpenRefusesCheaply(t *testing.T) {
 
 	err := b.Execute(func() error {
 		called = true
+
 		return nil
 	})
 
@@ -90,6 +99,8 @@ func TestOpenRefusesCheaply(t *testing.T) {
 }
 
 func TestSuccessResetsFailureCount(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{FailureThreshold: 2})
 
 	_ = b.Execute(transientErr)
@@ -102,6 +113,8 @@ func TestSuccessResetsFailureCount(t *testing.T) {
 }
 
 func TestResetTimeoutMovesToHalfOpen(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2026, 11, 21, 15, 0, 0, 0, time.UTC)
 
 	b := New(Config{
@@ -128,6 +141,8 @@ func TestResetTimeoutMovesToHalfOpen(t *testing.T) {
 }
 
 func TestHalfOpenClosesAfterSuccesses(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2026, 11, 21, 15, 0, 0, 0, time.UTC)
 
 	b := New(Config{
@@ -150,6 +165,8 @@ func TestHalfOpenClosesAfterSuccesses(t *testing.T) {
 }
 
 func TestHalfOpenFailureReopensImmediately(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2026, 11, 21, 15, 0, 0, 0, time.UTC)
 
 	b := New(Config{
@@ -174,6 +191,8 @@ func TestHalfOpenFailureReopensImmediately(t *testing.T) {
 }
 
 func TestOnTransitionFiresInOrderAcrossLifecycle(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2026, 11, 21, 15, 0, 0, 0, time.UTC)
 
 	type move struct{ from, to State }
@@ -189,11 +208,13 @@ func TestOnTransitionFiresInOrderAcrossLifecycle(t *testing.T) {
 	})
 
 	_ = b.Execute(transientErr)
+
 	if len(moves) != 0 {
 		t.Fatalf("below threshold there is no transition, got %v", moves)
 	}
 
 	_ = b.Execute(transientErr)
+
 	if len(moves) != 1 || moves[0].from != StateClosed || moves[0].to != StateOpen {
 		t.Fatalf("threshold must fire closed->open, got %v", moves)
 	}
@@ -209,17 +230,21 @@ func TestOnTransitionFiresInOrderAcrossLifecycle(t *testing.T) {
 	}
 
 	_ = b.Execute(func() error { return nil })
+
 	if len(moves) != 2 {
 		t.Fatalf("first half-open success must not transition yet, got %v", moves)
 	}
 
 	_ = b.Execute(func() error { return nil })
+
 	if len(moves) != 3 || moves[2].from != StateHalfOpen || moves[2].to != StateClosed {
 		t.Fatalf("second half-open success must fire half_open->closed, got %v", moves)
 	}
 }
 
 func TestOnTransitionHalfOpenFailureFiresReopen(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2026, 11, 21, 15, 0, 0, 0, time.UTC)
 
 	var tos []State
@@ -254,6 +279,8 @@ func TestOnTransitionHalfOpenFailureFiresReopen(t *testing.T) {
 }
 
 func TestDeterministicFamiliesNeverTrip(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		err  error
@@ -264,6 +291,8 @@ func TestDeterministicFamiliesNeverTrip(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			b := New(Config{FailureThreshold: 1})
 
 			err := b.Execute(func() error { return tt.err })
@@ -280,6 +309,8 @@ func TestDeterministicFamiliesNeverTrip(t *testing.T) {
 }
 
 func TestInfrastructureAndTransientTrip(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		err  error
@@ -290,6 +321,8 @@ func TestInfrastructureAndTransientTrip(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			b := New(Config{FailureThreshold: 1})
 
 			_ = b.Execute(func() error { return tt.err })
@@ -302,9 +335,11 @@ func TestInfrastructureAndTransientTrip(t *testing.T) {
 }
 
 func TestPlainErrorTripsAsTransient(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{FailureThreshold: 1})
 
-	_ = b.Execute(func() error { return errors.New("boom") })
+	_ = b.Execute(func() error { return errBoom })
 
 	if b.State() != StateOpen {
 		t.Fatalf("unclassified errors default to Transient (error-family fail-open), must trip, got %s", b.State())
@@ -312,33 +347,35 @@ func TestPlainErrorTripsAsTransient(t *testing.T) {
 }
 
 func TestErrOpenIsTransientFamily(t *testing.T) {
+	t.Parallel()
+
 	if !errorfamily.IsRetryable(ErrOpen) {
 		t.Fatal("ErrOpen must be Transient so outer retry loops back off, not abort")
 	}
 }
 
 func TestExecuteReturnsFnErrorUnwrapped(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{})
 
-	sentinel := errors.New("boom")
+	err := b.Execute(func() error { return errBoom })
 
-	err := b.Execute(func() error { return sentinel })
-
-	if !errors.Is(err, sentinel) {
+	if !errors.Is(err, errBoom) {
 		t.Fatalf("Execute must return fn's error unmodified, got %v", err)
 	}
 }
 
 func TestConcurrentUseStaysConsistent(t *testing.T) {
+	t.Parallel()
+
 	b := New(Config{FailureThreshold: 10, SuccessThreshold: 2})
 
 	var wg sync.WaitGroup
 
 	for range 50 {
-
 		wg.Go(func() {
-
-			_ = b.Execute(func() error { return transientErr() })
+			_ = b.Execute(transientErr)
 			b.Record(nil)
 			_ = b.State()
 			_ = b.Allow()
