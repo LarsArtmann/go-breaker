@@ -56,7 +56,20 @@ Deliberately excluded (decisions recorded in [STACK.md](STACK.md)):
 
 ## Open questions
 
-_None pending._ Both were resolved on 2026-11-22: the license is
+Three pending since 2026-11-22 23:43 (from the gate-to-green execution
+report):
+
+1. **Dprint pin ownership** — CI here checks with 0.64.3 (matches the local
+   toolchain that formats the tree); go-retry pins 0.57.4. Keep the split,
+   align the fleet on 0.64.3, or revert here and reformat to the older
+   opinion? This also decides whether commit `b0037d5` stands as-is.
+2. **Fleet fixer-gotcha ledger** — the dupword-auto-fix-deletes-diagram-words
+   lesson is pinned in cqrs-htmx's agents-notes; it was hit again here
+   regardless. Commit it to crush-config `references/lessons.md` (loaded by
+   every session; needs a commit to that repo), or is per-repo AGENTS.md
+   placement enough?
+
+Both earlier questions were resolved on 2026-11-22: the license is
 **Proprietary** (owner commit `dad3511` corrected the README badge to match
 `LICENSE`; pkg.go.dev's UNKNOWN rendering is accurate), and commit
 ownership is **manual on request** — the owner commits directly (all
