@@ -27,6 +27,8 @@ versioning follows [Semantic Versioning](https://semver.org/).
 
 - TODO_LIST purge (2026-11-22): | T18 | Observe whether the pma auto-commit daemon picks up the 2026-11-22 doc set (commit-ownership question 2 adjacent)                                  | P3 | buildflow skill warns of a daemon blind spot; ten files were uncommitted at 18:12 — unverified either way                                        | 2026-11-22 audit report §f.12 | — done (2026-11-22: commit policy resolution by evidence — owner commits directly, dad3511 landed on top of agent work already pushed, all repo history owner-authored, no daemon pickup observed; agents commit on explicit request)
 
+- TODO_LIST purge (2026-11-22): | T8  | Regenerate `reports/coverage.out` from the current tree or trash it                                                                                | P3 | Stale 2026-11-21 artifact, gitignored, wired to nothing; nobody regenerates it                                                                   | 2026-11-22 report §c.7        | — done (2026-11-22 errata: premise dead — buildflow's test-coverage step auto-regenerates the artifact every full run; observed refreshed 17:43 during the audit, total 98.4% matching a fresh profile; gitignored-and-automatic is correct, no action needed)
+
 ### Fixed
 
 - README license badge corrected from MIT to Proprietary, matching the actual `LICENSE` (owner commit `dad3511`, 2026-11-22 — pkg.go.dev's "UNKNOWN" license rendering is accurate; closes the README-vs-LICENSE contradiction the audit flagged).
